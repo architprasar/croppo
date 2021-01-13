@@ -1,0 +1,48 @@
+body {
+  margin: 0;
+}
+
+.CropperBody {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.CropperBody .CropperContainer {
+  background-color: rgba(0, 0, 0, 0.137);
+  background-repeat: no-repeat;
+  background-position: center;
+  object-fit: scale-down;
+  image-rendering: optimizeQuality;
+}
+
+.CropperBody .CropperContainer img {
+  position: absolute;
+  z-index: 1;
+}
+
+.CropBox {
+  width: 50px;
+  cursor: move;
+  height: 50px;
+  border: 2px solid #ccc;
+  position: relative;
+  z-index: 3;
+}
+.ResizeNodes {
+  background: #fff;
+  border-radius: 50%;
+  position: relative;
+  cursor:nwse-resize;
+}
+.rightNode {
+  top: 105%;
+  left: 105%;
+  width: 10px;
+  height: 10px;
+  border: 1px solid black;
+}
