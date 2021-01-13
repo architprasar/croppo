@@ -16,8 +16,15 @@ var xDistance, yDistance;
 var boxHeight, boxWidth;
 var resizeCropbox = false;
 var nodes;
-var cropBoxwidth;
-var cropBoxheight;
+var cropBoxwidth = 50;
+var cropBoxheight = 50;
+var cropBoxXcordinate = 0;
+var cropBoxYcordinate = 0;
+var initialposy, initialposx;
+var xposOffset = 50;
+var yposOffset = 20;
+var currentposy, currentposx;
+
 //event listners
 window.addEventListener("load", setOnload);
 window.addEventListener("touchstart", cropStart, false);
@@ -129,16 +136,17 @@ function cropDrag(e) {
 }
 
 function setPosition(x, y, cropbox) {
-  if (x < 0 || y < 0 || y > VPwidth || x > VPheight) {
+  if (
+    x < 0 ||
+    y < 0 ||
+    y >= VPwidth - cropBoxwidth ||
+    x >= VPheight - cropBoxheight
+  ) {
     return;
   }
   cropbox.style.transform = "translate3d(" + x + "px, " + y + "px, 0)";
 }
 
-var initialposy, initialposx;
-var xposOffset = 50;
-var yposOffset = 20;
-var currentposy, currentposx;
 function resizeStart(e) {
   if (e.target != nodes) {
     return;
