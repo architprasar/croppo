@@ -144,6 +144,8 @@ function setPosition(x, y, cropbox) {
   ) {
     return;
   }
+  currentposy = y;
+  currentposx = x;
   cropbox.style.transform = "translate3d(" + x + "px, " + y + "px, 0)";
 }
 
@@ -197,4 +199,8 @@ function resizecroparea() {
   console.log(currentposx + " " + currentposy);
   dragItem.style.width = currentposx + "px";
   dragItem.style.height = currentposx + "px";
+}
+function getCropData(){
+var posXpercentage,posYpercentage;
+var heightPercentage,widthPercentage;
 }
