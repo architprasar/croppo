@@ -22,7 +22,7 @@ var cropBoxXcordinate = 0;
 var cropBoxYcordinate = 0;
 var initialposy, initialposx;
 var xposOffset = 50;
-var yposOffset = 20;
+var yposOffset = 50;
 var currentposy, currentposx;
 
 //event listners
@@ -60,6 +60,7 @@ function getImageWidthWeightAspectratio(x) {
   // get the image and height of original image.
   Iheight = x.height;
   Iwidth = x.width;
+  console.log(Iheight +" "+Iwidth);
   aspectRatio = Iheight / Iwidth;
   adjustWidthHeight();
 }
@@ -74,7 +75,7 @@ function adjustWidthHeight() {
 function createImage() {
   // preview the adjusted image.
   var style = "width:" + VPheight + "px;height:" + VPwidth + "px;";
-  console.log(VPwidth + " " + VPheight);
+
   var container = document.getElementById("CropperContainer");
   var bdy = document.getElementById("CropperImage");
   container.setAttribute("style", style);
@@ -135,6 +136,8 @@ function cropDrag(e) {
   }
 }
 
+
+
 function setPosition(x, y, cropbox) {
   if (
     x < 0 ||
@@ -146,6 +149,7 @@ function setPosition(x, y, cropbox) {
   }
   currentposy = y;
   currentposx = x;
+  getCropData();
   cropbox.style.transform = "translate3d(" + x + "px, " + y + "px, 0)";
 }
 
@@ -197,10 +201,45 @@ function resizecroparea() {
   cropBoxwidth = currentposx;
   cropBoxheight = currentposx;
   console.log(currentposx + " " + currentposy);
-  dragItem.style.width = currentposx + "px";
-  dragItem.style.height = currentposx + "px";
+  dragItem.style.width = cropBoxwidth + "px";
+  dragItem.style.height = cropBoxheight + "px";
 }
-function getCropData(){
-var posXpercentage,posYpercentage;
-var heightPercentage,widthPercentage;
+function getCropData() {
+  var posXpercentage, posYpercentage;
+  var heightPercentage, widthPercentage;
+  posXpercentage = precentage(currentposx, VPheight);
+  posYpercentage = precentage(currentposy, VPwidth);
+  heightPercentage = precentage(cropBoxheight, VPwidth);
+  widthPercentage = precentage(cropBoxwidth, VPheight);
+  getExactcoordinates(
+    posXpercentage,
+    posYpercentage,
+    heightPercentage,
+    widthPercentage
+  );
+}
+
+function precentage(val, total) {
+  return (val / total) * 100;
+}
+
+function getExactcoordinates(x, y, h, w) {
+  var actposXpercentage, actposYpercentage;
+  var actheightPercentage, actwidthPercentage;
+  actposXpercentage = resolveprecentage(x, Iwidth);
+  actposYpercentage = resolveprecentage(y, Iheight) ;
+  actwidthPercentage = resolveprecentage(w, Iwidth)+ actposXpercentage ;
+  actheightPercentage = resolveprecentage(h, Iheight) + actposYpercentage;
+  console.log(
+    actposXpercentage +
+      " " +
+      actposYpercentage +
+      " " +
+      actheightPercentage +
+      " " +
+      actwidthPercentage
+  );
+}
+function resolveprecentage(val, total) {
+  return (total / 100) * val;
 }

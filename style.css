@@ -37,7 +37,7 @@ body {
   background: #fff;
   border-radius: 50%;
   position: relative;
-  cursor:nwse-resize;
+  cursor: nwse-resize;
 }
 .rightNode {
   top: 105%;
