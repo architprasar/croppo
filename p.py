@@ -10,10 +10,12 @@ print(str(width) +" "+ str(height))
 # 837.8906249999999 1327.21875 1662.375 1173.046875
 #  1193.15625 429 1293.703125 2057.859375
 # Setting the points for cropped image 
-left = 837.8906249999999
-top = 1327.21875
-bottom = 1662.375 
-right = 1173.046875
+
+# 1240.078125 361.96875 1226.671875 2104.7812
+left = 1240.078125
+top = 361.96875
+bottom = 1226.671875 
+right = 2104.7812
   
 # Cropped image of above dimension 
 # (It will not change orginal image) 

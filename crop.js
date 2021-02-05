@@ -12,18 +12,22 @@ var initialX;
 var initialY;
 var xOffset = 0;
 var yOffset = 0;
-var xDistance, yDistance;
-var boxHeight, boxWidth;
+
+
 var resizeCropbox = false;
 var nodes;
 var cropBoxwidth = 50;
 var cropBoxheight = 50;
-var cropBoxXcordinate = 0;
-var cropBoxYcordinate = 0;
+var currentposycrop=0,currentposxcrop=0;
 var initialposy, initialposx;
 var xposOffset = 50;
 var yposOffset = 50;
-var currentposy, currentposx;
+var currentposy = 0,
+  currentposx = 0;
+var posXpercentage, posYpercentage;
+var heightPercentage, widthPercentage;
+var actposXpercentage, actposYpercentage;
+var actheightPercentage, actwidthPercentage;
 
 //event listners
 window.addEventListener("load", setOnload);
@@ -45,6 +49,9 @@ function collectimage(x) {
     img = new Image();
     img.onload = function () {
       getImageWidthWeightAspectratio(img);
+
+      document.getElementById("CropperBody").style.display = "flex";
+      document.getElementById("CropperImage").style.display = "flex";
     };
     img.onerror = function () {
       alert("not a valid file: " + file.type);
@@ -53,21 +60,21 @@ function collectimage(x) {
   } else {
     return;
   }
-  document.getElementById("CropperBody").style.display = "flex";
-  document.getElementById("CropperImage").style.display = "flex";
 }
 function getImageWidthWeightAspectratio(x) {
   // get the image and height of original image.
   Iheight = x.height;
   Iwidth = x.width;
-  console.log(Iheight +" "+Iwidth);
+  console.log(Iheight + " " + Iwidth);
+
   aspectRatio = Iheight / Iwidth;
+
   adjustWidthHeight();
 }
 function adjustWidthHeight() {
   // Adjust height and width of image according to viewport.
 
-  VPwidth = window.innerWidth / 3;
+  VPwidth = window.innerWidth;
   console.log(VPwidth);
   VPheight = VPwidth / aspectRatio;
   createImage();
@@ -121,7 +128,6 @@ function cropEnd(e) {
 function cropDrag(e) {
   resizeDrag(e);
   if (active) {
-    e.preventDefault();
     if (e.type === "touchmove") {
       currentX = e.touches[0].clientX - initialX;
       currentY = e.touches[0].clientY - initialY;
@@ -135,8 +141,6 @@ function cropDrag(e) {
     setPosition(currentX, currentY, dragItem);
   }
 }
-
-
 
 function setPosition(x, y, cropbox) {
   if (
@@ -159,8 +163,8 @@ function resizeStart(e) {
   }
   resizeCropbox = true;
   if (e.type === "touchstart") {
-    initialposx = e.touches[0].clientX;
-    initialposy = e.touches[0].clientY;
+    initialposx = e.touches[0].clientX - xposOffset;
+    initialposy = e.touches[0].clientY - yposOffset;
   } else {
     initialposx = e.clientX - xposOffset;
     initialposy = e.clientY - yposOffset;
@@ -171,75 +175,103 @@ function resizeDrag(e) {
   if (resizeCropbox) {
     e.preventDefault();
     if (e.type === "touchmove") {
-      currentposx = e.touches[0].clientX - initialposx;
-      currentposy = e.touches[0].clientY - initialposy;
+      currentposxcrop = e.touches[0].clientX - initialposx;
+      currentposycrop = e.touches[0].clientY - initialposy;
     } else {
-      currentposx = e.clientX - initialposx;
-      currentposy = e.clientY - initialposy;
+      currentposxcrop = e.clientX - initialposx;
+      currentposycrop = e.clientY - initialposy;
     }
-    xposOffset = currentposx;
-    yposOffset = currentposy;
+    xposOffset = currentposxcrop;
+    yposOffset = currentposycrop;
 
     resizecroparea();
   }
 }
 function resizeEnd(e) {
-  initialposx = currentposx;
-  initialposy = currentposy;
+  initialposx = currentposxcrop;
+  initialposy = currentposycrop;
   resizeCropbox = false;
 }
 
 function resizecroparea() {
   if (
-    currentposy >= VPwidth ||
-    currentposx >= VPheight ||
-    currentposy <= 0 ||
-    currentposx <= 0
+    currentposycrop >= VPwidth ||
+    currentposxcrop >= VPheight ||
+    currentposycrop <= 0 ||
+    currentposxcrop <= 0
   ) {
     return;
   }
-  cropBoxwidth = currentposx;
-  cropBoxheight = currentposx;
-  console.log(currentposx + " " + currentposy);
+  cropBoxwidth = currentposxcrop;
+  cropBoxheight = currentposxcrop;
+
   dragItem.style.width = cropBoxwidth + "px";
   dragItem.style.height = cropBoxheight + "px";
 }
 function getCropData() {
-  var posXpercentage, posYpercentage;
-  var heightPercentage, widthPercentage;
   posXpercentage = precentage(currentposx, VPheight);
   posYpercentage = precentage(currentposy, VPwidth);
-  heightPercentage = precentage(cropBoxheight, VPwidth);
-  widthPercentage = precentage(cropBoxwidth, VPheight);
-  getExactcoordinates(
-    posXpercentage,
-    posYpercentage,
-    heightPercentage,
-    widthPercentage
-  );
+  heightPercentage = precentage(cropBoxheight + currentposy, VPwidth);
+  widthPercentage = precentage(cropBoxwidth + currentposx, VPheight);
+  console.log(getExactcoordinates());
 }
 
 function precentage(val, total) {
   return (val / total) * 100;
 }
 
-function getExactcoordinates(x, y, h, w) {
-  var actposXpercentage, actposYpercentage;
-  var actheightPercentage, actwidthPercentage;
-  actposXpercentage = resolveprecentage(x, Iwidth);
-  actposYpercentage = resolveprecentage(y, Iheight) ;
-  actwidthPercentage = resolveprecentage(w, Iwidth)+ actposXpercentage ;
-  actheightPercentage = resolveprecentage(h, Iheight) + actposYpercentage;
-  console.log(
-    actposXpercentage +
-      " " +
-      actposYpercentage +
-      " " +
-      actheightPercentage +
-      " " +
-      actwidthPercentage
-  );
+function getExactcoordinates() {
+  actposXpercentage = resolveprecentage(posXpercentage, Iwidth);
+  actposYpercentage = resolveprecentage(posYpercentage, Iheight);
+  actwidthPercentage = resolveprecentage(widthPercentage, Iwidth);
+  actheightPercentage = resolveprecentage(heightPercentage, Iheight);
+  var data = {
+    left: actposXpercentage,
+    top: actposYpercentage,
+    bottom: actheightPercentage,
+    right: actwidthPercentage,
+  };
+
+  return data;
 }
 function resolveprecentage(val, total) {
   return (total / 100) * val;
 }
+
+function createHtml() {
+  var myvar =
+    '<div class="CropperBody" id="CropperImage" style="z-index: 1"></div>' +
+    '    <div class="CropperBody" id="CropperBody" style="z-index: 2">' +
+    '      <div class="CropperContainer" id="CropperContainer">' +
+    '        <div class="CropBox" id="cr" style="height: 50px; width: 50px">' +
+    '          <div class="ResizeNodes rightNode" id="node"></div>' +
+    "        </div>" +
+    "      </div>" +
+    "    </div>";
+}
+
+$(document).ready(function () {
+  $("#save").click(function () {
+    var cdata = getExactcoordinates();
+
+    var fd = new FormData();
+    fd.append("file", $("#pimagefile").prop("files")[0]);
+    fd.append("cdata", JSON.stringify(cdata));
+
+    $.ajax({
+      url: "http://127.0.0.1:8000/timage",
+      type: "POST",
+      contentType: "multipart/form-data",
+      contentType: false,
+      processData: false,
+      data: fd,
+      beforeSubmit: function () {},
+      success: function (data) {
+        if (data.status == "1") {
+        } else {
+        }
+      },
+      error: function () {},
+    });
+  });
+});

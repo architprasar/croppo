@@ -7,10 +7,11 @@
     <title>Document</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
     <script src="crop.js"></script>
   </head>
   <body>
-    <input type="file" onchange="collectimage(this)" />
+    <input type="file" onchange="collectimage(this)" id ="pimagefile" />
 
     <div class="CropperBody" id="CropperImage" style="z-index: 1"></div>
     <div class="CropperBody" id="CropperBody" style="z-index: 2">
@@ -20,5 +21,6 @@
         </div>
       </div>
     </div>
+    <button class="save" id="save">save</button>
   </body>
 </html>

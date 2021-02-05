@@ -29,20 +29,29 @@ body {
   width: 50px;
   cursor: move;
   height: 50px;
-  border: 2px solid #ccc;
+  border: 4px solid #4691f6;
   position: relative;
   z-index: 3;
 }
 .ResizeNodes {
-  background: #fff;
+  background: #4691f6;
   border-radius: 50%;
   position: relative;
   cursor: nwse-resize;
 }
 .rightNode {
-  top: 105%;
-  left: 105%;
-  width: 10px;
-  height: 10px;
-  border: 1px solid black;
+  top: 106%;
+  left: 108%;
+  width: 20px;
+  height: 20px;
+  border: 1px solid white;
+}
+.save{
+  position:fixed;
+  width:100px;
+  height:50px;
+  background:black;
+  color:white;
+  z-index: 100;
+  left:90%;
 }
