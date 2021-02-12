@@ -268,7 +268,7 @@ $(document).ready(function () {
     fd.append("cdata", JSON.stringify(cdata));
 
     $.ajax({
-      url: "http://127.0.0.1:8000/timage",
+      url: "/api",
       type: "POST",
       contentType: "multipart/form-data",
       contentType: false,
