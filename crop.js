@@ -241,23 +241,7 @@ function resolveprecentage(val, total) {
   return (total / 100) * val;
 }
 
-function createHtml() {
-  var myvar =
-    '<div class="CropperBody" id="CropperImage" style="z-index: 1"></div>' +
-    '    <div class="CropperBody" id="CropperBody" style="z-index: 2">' +
-    '      <div class="CropperContainer" id="CropperContainer">' +
-    '        <div class="CropBox" id="cr" style="height: 50px; width: 50px">' +
-    '          <div class="ResizeNodes rightNode" id="node"></div>' +
-    "        </div>" +
-    "      </div>" +
-    "    </div>";
-    var cropbody1 = document.createElement("div");
-    cropbody1.setAttribute("class","CropperBody");
-    
-    cropbody1.setAttribute("style","z-index:1");
-    document.body.appendChild(cropbody1)
 
-}
 
 $(document).ready(function () {
   $("#save").click(function () {
